@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49b4b3632679fb24e928212895aea6f4, type: 3}
+  m_Name: Ady
+  m_EditorClassIdentifier: Assembly-CSharp::GuidebookPage
+  pageTitle: Ady Endre
+  pageText: "Ady Endre 1877-ben sz\xFCletett \xC9rmindszenten, egy elszeg\xE9nyedett
+    nemesi csal\xE1dban. Tanulm\xE1nyai ut\xE1n \xFAjs\xE1g\xEDr\xF3k\xE9nt kezdett
+    dolgozni, \xE9s hamar a k\xF6z\xE9let egyik kritikus hangj\xE1v\xE1 v\xE1lt.
+    1906-ban jelent meg az \xDAj versek c\xEDm\u0171 k\xF6tete, amely forradalmas\xEDtotta
+    a magyar l\xEDr\xE1t. K\xF6lt\xE9szet\xE9ben a moderns\xE9g, a t\xE1rsadalmi
+    b\xEDr\xE1lat \xE9s a szem\xE9lyes v\xEDv\xF3d\xE1s kapott hangs\xFAlyt. Szerelme,
+    L\xE9da (Br\xFCll Ad\xE9l) meghat\xE1roz\xF3 m\xFAzs\xE1ja volt, \xE9s sz\xE1mos
+    vers\xE9t ihlette. Ady politikailag is akt\xEDv volt, \xE9s gyakran b\xEDr\xE1lta
+    a kor t\xE1rsadalmi viszonyait. Betegs\xE9ge, a szifilisz egyre jobban megviselte,
+    de alkot\xF3kedve nem cs\xF6kkent. A V\xE9r \xE9s arany \xE9s az Ill\xE9s szeker\xE9n
+    k\xF6tetei a magyar modernizmus alapm\u0171vei. \xC9lete v\xE9g\xE9n a Nyugat
+    vez\xE9ralakjak\xE9nt a magyar irodalom meg\xFAj\xEDt\xF3ja lett. 1919-ben halt
+    meg, de hat\xE1sa a 20. sz\xE1zadi k\xF6lt\xE9szet eg\xE9sz\xE9re kiterjed."
+  pageImage: {fileID: 21300000, guid: c2600467888ca4346bd6500c1312dea5, type: 3}

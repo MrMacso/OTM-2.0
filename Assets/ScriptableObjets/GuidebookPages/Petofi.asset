@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49b4b3632679fb24e928212895aea6f4, type: 3}
+  m_Name: Petofi
+  m_EditorClassIdentifier: Assembly-CSharp::GuidebookPage
+  pageTitle: "Pet\u0151fi S\xE1ndor"
+  pageText: "Pet\u0151fi S\xE1ndor 1823-ban sz\xFCletett Kisk\u0151r\xF6s\xF6n, \xE9s
+    a magyar romantika egyik legmeghat\xE1roz\xF3bb alakj\xE1v\xE1 v\xE1lt. Gyermekkor\xE1t
+    szeg\xE9nys\xE9g \xE9s sok k\xF6lt\xF6z\xE9s jellemezte, ami kor\xE1n \xF6n\xE1ll\xF3s\xE1gra
+    k\xE9nyszer\xEDtette. Fiatalon sz\xEDn\xE9sznek \xE1llt, majd v\xE1ndorsz\xEDn\xE9szk\xE9nt
+    j\xE1rta az orsz\xE1got, mik\xF6zben verseit is \xEDrta. 1844-ben jelent meg
+    els\u0151 k\xF6tete, amely azonnal orsz\xE1gos ismerts\xE9get hozott sz\xE1m\xE1ra.
+    Bar\xE1ts\xE1ga Arany J\xE1nossal a magyar irodalom egyik legszebb alkot\xF3i
+    kapcsolat\xE1v\xE1 v\xE1lt. 1848-ban akt\xEDvan r\xE9szt vett a forradalomban,
+    \xE9s meg\xEDrta a Nemzeti dalt, amely a szabads\xE1gharc jelk\xE9p\xE9v\xE9
+    v\xE1lt. Feles\xE9g\xE9vel, Szendrey J\xFAli\xE1val szenved\xE9lyes, de viharos
+    kapcsolatot \xE9lt meg. A szabads\xE1gharcban nemcsak k\xF6lt\u0151k\xE9nt, hanem
+    katonak\xE9nt is helyt \xE1llt. 1849-ben Segesv\xE1rn\xE1l t\u0171nt el, hal\xE1la
+    m\xE1ig nem teljesen tiszt\xE1zott. R\xF6vid \xE9lete ellen\xE9re hatalmas \xE9letm\u0171vet
+    hagyott h\xE1tra, amely a magyar nemzeti identit\xE1s alapk\xF6ve."
+  pageImage: {fileID: 21300000, guid: d30876e4a59f6d64b86c75faad3fbda9, type: 3}

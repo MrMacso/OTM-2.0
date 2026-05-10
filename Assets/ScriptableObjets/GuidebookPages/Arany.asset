@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49b4b3632679fb24e928212895aea6f4, type: 3}
+  m_Name: Arany
+  m_EditorClassIdentifier: Assembly-CSharp::GuidebookPage
+  pageTitle: "Arany J\xE1nos"
+  pageText: "Arany J\xE1nos 1817-ben sz\xFCletett Nagyszalont\xE1n, szer\xE9ny paraszti
+    csal\xE1dban. Gyermekkor\xE1t\xF3l kezdve kiv\xE9teles nyelv\xE9rz\xE9kkel \xE9s
+    olvasotts\xE1ggal t\u0171nt ki. Tan\xEDt\xF3k\xE9nt \xE9s jegyz\u0151k\xE9nt
+    dolgozott, miel\u0151tt orsz\xE1gos h\xEDrn\xE9vre tett szert. 1846-ban \xEDrta
+    meg a Toldit, amelyet a Kisfaludy T\xE1rsas\xE1g p\xE1ly\xE1zat\xE1ra k\xFCld\xF6tt
+    be, \xE9s amely azonnal hatalmas sikert aratott. A m\u0171 Pet\u0151fi S\xE1ndor
+    bar\xE1ts\xE1g\xE1t is meghozta sz\xE1m\xE1ra, amely \xE9let\xE9nek egyik legfontosabb
+    kapcsolata lett. Arany a magyar balladak\xF6lt\xE9szet mestere, legismertebb
+    ballad\xE1i k\xF6z\xE9 tartozik a V. L\xE1szl\xF3 \xE9s a Tetemre h\xEDv\xE1s.
+    A szabads\xE1gharc lever\xE9se ut\xE1n visszavonultan \xE9lt, de tov\xE1bbra
+    is alkotott. K\xE9s\u0151bb a Magyar Tudom\xE1nyos Akad\xE9mia f\u0151titk\xE1ra
+    lett, \xE9s jelent\u0151s szerepet j\xE1tszott a magyar irodalmi \xE9let szervez\xE9s\xE9ben.
+    \xC9lete v\xE9g\xE9n eg\xE9szs\xE9ge megromlott, de m\xE9g ekkor is nagy m\u0171veken
+    dolgozott. Munk\xE1ss\xE1ga a magyar klassziciz\xE1l\xF3 realizmus egyik cs\xFAcspontja."
+  pageImage: {fileID: 21300000, guid: d7e6ae90b9032a54b8ad6333d072d065, type: 3}

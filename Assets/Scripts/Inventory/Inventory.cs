@@ -36,14 +36,29 @@ public class Inventory : MonoBehaviour
         items.Add(item);
         Debug.Log("Picked up: " + item.itemName);
 
-        if (item.isKeyItem && item.name.IndexOf("Pocket", System.StringComparison.OrdinalIgnoreCase) >= 0)
+        if (IsPocketWatch(item))
         {
             GameProgressManager.Instance?.AddProgressFlag(ProgressFlags.PocketWatchCollected);
+
+            PocketWatchInteractable sceneWatch = FindFirstObjectByType<PocketWatchInteractable>();
+            sceneWatch?.BindWatch();
         }
     }
 
     public bool HasItem(InventoryItem item)
     {
         return item != null && items.Contains(item);
+    }
+
+    private bool IsPocketWatch(InventoryItem item)
+    {
+        if (!item.isKeyItem)
+        {
+            return false;
+        }
+
+        string idSource = string.IsNullOrWhiteSpace(item.itemName) ? item.name : item.itemName;
+        return idSource.IndexOf("Pocket", System.StringComparison.OrdinalIgnoreCase) >= 0 ||
+               idSource.IndexOf("Watch", System.StringComparison.OrdinalIgnoreCase) >= 0;
     }
 }

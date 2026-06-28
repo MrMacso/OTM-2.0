@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class MuseumTimelineManager : MonoBehaviour
 {
@@ -7,6 +8,11 @@ public class MuseumTimelineManager : MonoBehaviour
 
     [SerializeField] private MuseumTimePeriod startingPeriod = MuseumTimePeriod.Present;
     [SerializeField] private bool addProgressFlagOnFirstTravel = true;
+
+    [Header("Events")]
+    [SerializeField] private UnityEvent onTravelToPresent;
+    [SerializeField] private UnityEvent onTravelToPast;
+    [SerializeField] private UnityEvent onFirstTimeTravelCompleted;
 
     private bool hasCompletedFirstTimeTravel;
 
@@ -32,6 +38,21 @@ public class MuseumTimelineManager : MonoBehaviour
         TimePeriodChanged?.Invoke(CurrentPeriod);
     }
 
+    public void TravelTo(MuseumTimePeriod newPeriod)
+    {
+        SetTimePeriod(newPeriod);
+    }
+
+    public void TravelToPast()
+    {
+        SetTimePeriod(MuseumTimePeriod.Past);
+    }
+
+    public void ReturnToPresent()
+    {
+        SetTimePeriod(MuseumTimePeriod.Present);
+    }
+
     public void SetTimePeriod(MuseumTimePeriod newPeriod)
     {
         if (CurrentPeriod == newPeriod)
@@ -44,6 +65,7 @@ public class MuseumTimelineManager : MonoBehaviour
 
         Debug.Log($"Museum time period changed to: {CurrentPeriod}");
         TimePeriodChanged?.Invoke(CurrentPeriod);
+        InvokePeriodEvents(CurrentPeriod);
 
         if (addProgressFlagOnFirstTravel &&
             !hasCompletedFirstTimeTravel &&
@@ -51,11 +73,8 @@ public class MuseumTimelineManager : MonoBehaviour
             CurrentPeriod != MuseumTimePeriod.Present)
         {
             hasCompletedFirstTimeTravel = true;
-
-            if (GameProgressManager.Instance != null)
-            {
-                GameProgressManager.Instance.AddProgressFlag(ProgressFlags.FirstTimeTravelCompleted);
-            }
+            GameProgressManager.Instance?.AddProgressFlag(ProgressFlags.FirstTimeTravelCompleted);
+            onFirstTimeTravelCompleted?.Invoke();
         }
     }
 
@@ -63,11 +82,24 @@ public class MuseumTimelineManager : MonoBehaviour
     {
         if (CurrentPeriod == MuseumTimePeriod.Present)
         {
-            SetTimePeriod(MuseumTimePeriod.Past);
+            TravelToPast();
         }
         else
         {
-            SetTimePeriod(MuseumTimePeriod.Present);
+            ReturnToPresent();
+        }
+    }
+
+    private void InvokePeriodEvents(MuseumTimePeriod period)
+    {
+        switch (period)
+        {
+            case MuseumTimePeriod.Present:
+                onTravelToPresent?.Invoke();
+                break;
+            case MuseumTimePeriod.Past:
+                onTravelToPast?.Invoke();
+                break;
         }
     }
 }

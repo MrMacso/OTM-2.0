@@ -14,6 +14,7 @@ public class MonsterAI : MonoBehaviour
     [Header("References")]
     [SerializeField] private Transform player;
     [SerializeField] private NavMeshAgent agent;
+    [SerializeField] private WatchPulseSystem watchPulseSystem;
 
     [Header("Patrol")]
     [SerializeField] private Transform[] patrolPoints;
@@ -22,6 +23,11 @@ public class MonsterAI : MonoBehaviour
     [Header("Detection")]
     [SerializeField] private float detectionRange = 12f;
     [SerializeField] private float attackRange = 1.5f;
+
+    [Header("Pulse Pressure")]
+    [SerializeField] private bool startPanicOnDetection = true;
+    [SerializeField] private float detectionPulseSpike = 20f;
+    [SerializeField] private float attackPulseSpike = 45f;
 
     [Header("Movement")]
     [SerializeField] private float patrolSpeed = 2f;
@@ -53,6 +59,11 @@ public class MonsterAI : MonoBehaviour
         {
             GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
             player = playerObject != null ? playerObject.transform : null;
+        }
+
+        if (watchPulseSystem == null)
+        {
+            watchPulseSystem = WatchPulseSystem.Instance;
         }
 
         if (player == null)
@@ -149,6 +160,7 @@ public class MonsterAI : MonoBehaviour
         }
 
         hasAttacked = true;
+        watchPulseSystem?.AddPulse(attackPulseSpike);
         Debug.Log("Monster attacked player.");
     }
 
@@ -167,5 +179,12 @@ public class MonsterAI : MonoBehaviour
     {
         state = MonsterState.Chase;
         agent.speed = chaseSpeed;
+
+        watchPulseSystem?.AddPulse(detectionPulseSpike);
+
+        if (startPanicOnDetection)
+        {
+            watchPulseSystem?.StartPanic();
+        }
     }
 }

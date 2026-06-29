@@ -13,4 +13,7 @@ public static class ProgressFlags
     public const string SecurityRoomUnlocked = "security_room_unlocked";
 
     public const string FirstJumpscareTriggered = "first_jumpscare_triggered";
+    public const string FirstBreathingRecovered = "first_breathing_recovered";
+
+    public const string DemoCompleted = "demo_completed";
 }

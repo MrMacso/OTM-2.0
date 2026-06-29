@@ -33,6 +33,10 @@ public class InputSystemFPSController : MonoBehaviour
     private bool isSprinting;
     private bool isCrouching;
 
+    public bool IsSprinting => isSprinting;
+    public bool IsCrouching => isCrouching;
+    public bool IsMoving => moveInput.sqrMagnitude > 0.01f;
+
     private void Awake()
     {
         controller = GetComponent<CharacterController>();

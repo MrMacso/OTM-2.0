@@ -7,6 +7,10 @@ public class TimelineProgressFlagInteractable : MonoBehaviour, IInteractable
     [SerializeField] private string prompt = "Press E to interact";
     [SerializeField] private string wrongPeriodPrompt = "This does not belong to this time.";
 
+    [Header("Feedback")]
+    [SerializeField] private string interactedFeedback = "This key should still exist in the present.";
+    [SerializeField] private string wrongPeriodFeedback = "This does not belong to this time.";
+
     [Header("Timeline")]
     [SerializeField] private MuseumTimePeriod requiredPeriod = MuseumTimePeriod.Past;
     [SerializeField] private bool requireExactPeriod = true;
@@ -32,6 +36,7 @@ public class TimelineProgressFlagInteractable : MonoBehaviour, IInteractable
 
         if (!CanInteractInCurrentPeriod())
         {
+            FeedbackMessageUI.Instance?.ShowWarning(wrongPeriodFeedback);
             onWrongPeriod?.Invoke();
             return;
         }
@@ -49,6 +54,7 @@ public class TimelineProgressFlagInteractable : MonoBehaviour, IInteractable
         }
 
         GameProgressManager.Instance.AddProgressFlag(progressFlagToAdd);
+        FeedbackMessageUI.Instance?.ShowDiscovery(interactedFeedback);
         onInteracted?.Invoke();
         hasBeenUsed = true;
 

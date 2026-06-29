@@ -9,6 +9,12 @@ public class LockedEvidenceBoxInteractable : MonoBehaviour, IInteractable
     [SerializeField] private string collectEvidencePrompt = "Press E to take the evidence";
     [SerializeField] private string completedPrompt = "The cassette box is empty.";
 
+    [Header("Feedback")]
+    [SerializeField] private string lockedFeedback = "The lock is old, but the key is missing.";
+    [SerializeField] private string openedFeedback = "The cassette box clicks open.";
+    [SerializeField] private string evidenceFeedback = "A name, a date, and a room number. This changes everything.";
+    [SerializeField] private string wrongPeriodFeedback = "This evidence is not here in this time.";
+
     [Header("Requirements")]
     [SerializeField] private MuseumTimePeriod requiredPeriod = MuseumTimePeriod.Present;
     [SerializeField] private string requiredFlagToOpen = ProgressFlags.CassetteKeyStolenPast;
@@ -38,7 +44,7 @@ public class LockedEvidenceBoxInteractable : MonoBehaviour, IInteractable
         {
             if (!IsInRequiredPeriod())
             {
-                return "This evidence is not here in this time.";
+                return wrongPeriodFeedback;
             }
 
             if (evidenceCollected)
@@ -65,6 +71,7 @@ public class LockedEvidenceBoxInteractable : MonoBehaviour, IInteractable
     {
         if (!IsInRequiredPeriod())
         {
+            FeedbackMessageUI.Instance?.ShowWarning(wrongPeriodFeedback);
             onWrongPeriod?.Invoke();
             return;
         }
@@ -87,12 +94,14 @@ public class LockedEvidenceBoxInteractable : MonoBehaviour, IInteractable
     {
         if (!HasRequiredFlag())
         {
+            FeedbackMessageUI.Instance?.ShowWarning(lockedFeedback);
             onLockedTried?.Invoke();
             return;
         }
 
         isOpen = true;
         GameProgressManager.Instance?.AddProgressFlag(openedFlag);
+        FeedbackMessageUI.Instance?.ShowMessage(openedFeedback);
         ApplyVisualState();
         onOpened?.Invoke();
     }
@@ -112,6 +121,7 @@ public class LockedEvidenceBoxInteractable : MonoBehaviour, IInteractable
             GameProgressManager.Instance?.AddProgressFlag(ProgressFlags.BasementPuzzleSolved);
         }
 
+        FeedbackMessageUI.Instance?.ShowDiscovery(evidenceFeedback);
         ApplyVisualState();
         onEvidenceCollected?.Invoke();
     }

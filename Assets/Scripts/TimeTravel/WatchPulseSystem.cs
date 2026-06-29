@@ -25,6 +25,15 @@ public class WatchPulseSystem : MonoBehaviour
     [SerializeField] private float maxPastSeconds = 90f;
     [SerializeField] private float calmDrainPerSecond = 1f;
     [SerializeField] private float panicDrainPerSecond = 6f;
+    [SerializeField] private float lowWatchWarningSeconds = 15f;
+
+    [Header("Feedback")]
+    [SerializeField] private string travelToPastFeedback = "The watch bites into your pulse. You are back in 1944.";
+    [SerializeField] private string returnToPresentFeedback = "The museum settles back into the present.";
+    [SerializeField] private string panicStartedFeedback = "Your pulse spikes. The watch hands are spinning faster.";
+    [SerializeField] private string panicEndedFeedback = "Your breathing steadies.";
+    [SerializeField] private string lowWatchTimeFeedback = "The watch is almost out of time.";
+    [SerializeField] private string forcedReturnFeedback = "Your pulse is too high. The watch is pulling you back.";
 
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI pulseText;
@@ -35,6 +44,7 @@ public class WatchPulseSystem : MonoBehaviour
     [Header("Events")]
     [SerializeField] private UnityEvent onPanicStarted;
     [SerializeField] private UnityEvent onPanicEnded;
+    [SerializeField] private UnityEvent onLowWatchTime;
     [SerializeField] private UnityEvent onCriticalPulse;
     [SerializeField] private UnityEvent onForcedReturn;
 
@@ -43,6 +53,9 @@ public class WatchPulseSystem : MonoBehaviour
     private bool isPanicking;
     private bool isBreathing;
     private bool isInPast;
+    private bool hasShownLowWatchWarning;
+    private bool suppressNextPresentFeedback;
+    private bool suppressNextPanicEndFeedback;
 
     public float CurrentPulse => currentPulse;
     public float RemainingPastSeconds => remainingPastSeconds;
@@ -78,7 +91,7 @@ public class WatchPulseSystem : MonoBehaviour
         if (timelineManager != null)
         {
             timelineManager.TimePeriodChanged += HandleTimePeriodChanged;
-            HandleTimePeriodChanged(timelineManager.CurrentPeriod);
+            HandleTimePeriodChanged(timelineManager.CurrentPeriod, false);
         }
     }
 
@@ -93,7 +106,7 @@ public class WatchPulseSystem : MonoBehaviour
         {
             timelineManager.TimePeriodChanged -= HandleTimePeriodChanged;
             timelineManager.TimePeriodChanged += HandleTimePeriodChanged;
-            HandleTimePeriodChanged(timelineManager.CurrentPeriod);
+            HandleTimePeriodChanged(timelineManager.CurrentPeriod, false);
         }
     }
 
@@ -120,6 +133,7 @@ public class WatchPulseSystem : MonoBehaviour
         }
 
         isPanicking = true;
+        FeedbackMessageUI.Instance?.ShowDanger(panicStartedFeedback);
         onPanicStarted?.Invoke();
     }
 
@@ -131,6 +145,13 @@ public class WatchPulseSystem : MonoBehaviour
         }
 
         isPanicking = false;
+
+        if (!suppressNextPanicEndFeedback)
+        {
+            FeedbackMessageUI.Instance?.ShowMessage(panicEndedFeedback);
+        }
+
+        suppressNextPanicEndFeedback = false;
         onPanicEnded?.Invoke();
     }
 
@@ -159,21 +180,39 @@ public class WatchPulseSystem : MonoBehaviour
     public void ResetPastTimer()
     {
         remainingPastSeconds = maxPastSeconds;
+        hasShownLowWatchWarning = false;
         WatchTimeChanged?.Invoke(remainingPastSeconds);
     }
 
     private void HandleTimePeriodChanged(MuseumTimePeriod period)
+    {
+        HandleTimePeriodChanged(period, true);
+    }
+
+    private void HandleTimePeriodChanged(MuseumTimePeriod period, bool showFeedback)
     {
         isInPast = period != MuseumTimePeriod.Present;
 
         if (isInPast)
         {
             ResetPastTimer();
+
+            if (showFeedback)
+            {
+                FeedbackMessageUI.Instance?.ShowDanger(travelToPastFeedback);
+            }
         }
         else
         {
             EndPanic();
             SetBreathing(false);
+
+            if (showFeedback && !suppressNextPresentFeedback)
+            {
+                FeedbackMessageUI.Instance?.ShowMessage(returnToPresentFeedback);
+            }
+
+            suppressNextPresentFeedback = false;
         }
     }
 
@@ -213,6 +252,13 @@ public class WatchPulseSystem : MonoBehaviour
         remainingPastSeconds = Mathf.Max(0f, remainingPastSeconds - drainRate * deltaTime);
         WatchTimeChanged?.Invoke(remainingPastSeconds);
 
+        if (!hasShownLowWatchWarning && remainingPastSeconds <= lowWatchWarningSeconds)
+        {
+            hasShownLowWatchWarning = true;
+            FeedbackMessageUI.Instance?.ShowWarning(lowWatchTimeFeedback);
+            onLowWatchTime?.Invoke();
+        }
+
         if (remainingPastSeconds <= 0f)
         {
             TriggerCriticalPulse();
@@ -226,6 +272,9 @@ public class WatchPulseSystem : MonoBehaviour
             return;
         }
 
+        FeedbackMessageUI.Instance?.ShowDanger(forcedReturnFeedback);
+        suppressNextPresentFeedback = true;
+        suppressNextPanicEndFeedback = true;
         onCriticalPulse?.Invoke();
         ForceReturnToPresent();
     }

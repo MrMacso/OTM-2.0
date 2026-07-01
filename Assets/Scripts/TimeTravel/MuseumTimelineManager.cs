@@ -8,6 +8,7 @@ public class MuseumTimelineManager : MonoBehaviour
 
     [SerializeField] private MuseumTimePeriod startingPeriod = MuseumTimePeriod.Present;
     [SerializeField] private bool addProgressFlagOnFirstTravel = true;
+    [SerializeField] private ProgressFlagReference firstTimeTravelCompletedFlag = new ProgressFlagReference(ProgressFlags.FirstTimeTravelCompleted);
 
     [Header("Events")]
     [SerializeField] private UnityEvent onTravelToPresent;
@@ -73,7 +74,12 @@ public class MuseumTimelineManager : MonoBehaviour
             CurrentPeriod != MuseumTimePeriod.Present)
         {
             hasCompletedFirstTimeTravel = true;
-            GameProgressManager.Instance?.AddProgressFlag(ProgressFlags.FirstTimeTravelCompleted);
+
+            if (firstTimeTravelCompletedFlag.IsAssigned)
+            {
+                GameProgressManager.Instance?.AddProgressFlag(firstTimeTravelCompletedFlag);
+            }
+
             onFirstTimeTravelCompleted?.Invoke();
         }
     }

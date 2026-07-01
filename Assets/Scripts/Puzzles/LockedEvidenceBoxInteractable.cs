@@ -17,11 +17,12 @@ public class LockedEvidenceBoxInteractable : MonoBehaviour, IInteractable
 
     [Header("Requirements")]
     [SerializeField] private MuseumTimePeriod requiredPeriod = MuseumTimePeriod.Present;
-    [SerializeField] private string requiredFlagToOpen = ProgressFlags.CassetteKeyStolenPast;
+    [SerializeField] private ProgressFlagReference requiredFlagToOpen = new ProgressFlagReference(ProgressFlags.CassetteKeyStolenPast);
 
     [Header("Progress")]
-    [SerializeField] private string openedFlag = ProgressFlags.CassetteBoxOpenedPresent;
-    [SerializeField] private string evidenceFoundFlag = ProgressFlags.CassetteEvidenceFound;
+    [SerializeField] private ProgressFlagReference openedFlag = new ProgressFlagReference(ProgressFlags.CassetteBoxOpenedPresent);
+    [SerializeField] private ProgressFlagReference evidenceFoundFlag = new ProgressFlagReference(ProgressFlags.CassetteEvidenceFound);
+    [SerializeField] private ProgressFlagReference completedPuzzleFlag = new ProgressFlagReference(ProgressFlags.BasementPuzzleSolved);
     [SerializeField] private bool completePuzzleWhenEvidenceTaken = true;
 
     [Header("Object States")]
@@ -100,7 +101,12 @@ public class LockedEvidenceBoxInteractable : MonoBehaviour, IInteractable
         }
 
         isOpen = true;
-        GameProgressManager.Instance?.AddProgressFlag(openedFlag);
+
+        if (openedFlag.IsAssigned)
+        {
+            GameProgressManager.Instance?.AddProgressFlag(openedFlag);
+        }
+
         FeedbackMessageUI.Instance?.ShowMessage(openedFeedback);
         ApplyVisualState();
         onOpened?.Invoke();
@@ -114,11 +120,15 @@ public class LockedEvidenceBoxInteractable : MonoBehaviour, IInteractable
         }
 
         evidenceCollected = true;
-        GameProgressManager.Instance?.AddProgressFlag(evidenceFoundFlag);
 
-        if (completePuzzleWhenEvidenceTaken)
+        if (evidenceFoundFlag.IsAssigned)
         {
-            GameProgressManager.Instance?.AddProgressFlag(ProgressFlags.BasementPuzzleSolved);
+            GameProgressManager.Instance?.AddProgressFlag(evidenceFoundFlag);
+        }
+
+        if (completePuzzleWhenEvidenceTaken && completedPuzzleFlag.IsAssigned)
+        {
+            GameProgressManager.Instance?.AddProgressFlag(completedPuzzleFlag);
         }
 
         FeedbackMessageUI.Instance?.ShowDiscovery(evidenceFeedback);
@@ -133,15 +143,13 @@ public class LockedEvidenceBoxInteractable : MonoBehaviour, IInteractable
             return;
         }
 
-        isOpen = !string.IsNullOrWhiteSpace(openedFlag) &&
-                 GameProgressManager.Instance.HasProgressFlag(openedFlag);
-        evidenceCollected = !string.IsNullOrWhiteSpace(evidenceFoundFlag) &&
-                            GameProgressManager.Instance.HasProgressFlag(evidenceFoundFlag);
+        isOpen = openedFlag.IsAssigned && GameProgressManager.Instance.HasProgressFlag(openedFlag);
+        evidenceCollected = evidenceFoundFlag.IsAssigned && GameProgressManager.Instance.HasProgressFlag(evidenceFoundFlag);
     }
 
     private bool HasRequiredFlag()
     {
-        return string.IsNullOrWhiteSpace(requiredFlagToOpen) ||
+        return !requiredFlagToOpen.IsAssigned ||
                (GameProgressManager.Instance != null && GameProgressManager.Instance.HasProgressFlag(requiredFlagToOpen));
     }
 

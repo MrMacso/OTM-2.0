@@ -7,7 +7,7 @@ public class ProgressFlagInteractable : MonoBehaviour, IInteractable
     [SerializeField] private string prompt = "Press E to interact";
 
     [Header("Progress")]
-    [SerializeField] private string progressFlagToAdd;
+    [SerializeField] private ProgressFlagReference progressFlagToAdd;
     [SerializeField] private bool disableAfterInteraction = true;
 
     [Header("Events")]
@@ -24,7 +24,7 @@ public class ProgressFlagInteractable : MonoBehaviour, IInteractable
             return;
         }
 
-        if (string.IsNullOrWhiteSpace(progressFlagToAdd))
+        if (!progressFlagToAdd.IsAssigned)
         {
             Debug.LogWarning($"{nameof(ProgressFlagInteractable)} on {name} has no progress flag assigned.");
             return;

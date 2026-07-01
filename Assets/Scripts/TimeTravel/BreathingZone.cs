@@ -19,7 +19,7 @@ public class BreathingZone : MonoBehaviour
     [SerializeField] private float requirementHintCooldown = 2f;
 
     [Header("Progress")]
-    [SerializeField] private string recoveredFlag = ProgressFlags.FirstBreathingRecovered;
+    [SerializeField] private ProgressFlagReference recoveredFlag = new ProgressFlagReference(ProgressFlags.FirstBreathingRecovered);
     [SerializeField] private bool addRecoveredFlagOnlyOnce = true;
 
     [Header("Events")]
@@ -141,7 +141,7 @@ public class BreathingZone : MonoBehaviour
         WatchPulseSystem.Instance?.SetBreathing(false);
         FeedbackMessageUI.Instance?.ShowMessage(recoveredFeedback);
 
-        if (!string.IsNullOrWhiteSpace(recoveredFlag))
+        if (recoveredFlag.IsAssigned)
         {
             GameProgressManager.Instance?.AddProgressFlag(recoveredFlag);
         }

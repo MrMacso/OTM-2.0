@@ -5,8 +5,8 @@ using UnityEngine.Events;
 public class ChapterCompleteTrigger : MonoBehaviour
 {
     [Header("Requirements")]
-    [SerializeField] private string requiredFlag = ProgressFlags.CassetteEvidenceFound;
-    [SerializeField] private string completionFlagToAdd = ProgressFlags.DemoCompleted;
+    [SerializeField] private ProgressFlagReference requiredFlag = new ProgressFlagReference(ProgressFlags.CassetteEvidenceFound);
+    [SerializeField] private ProgressFlagReference completionFlagToAdd = new ProgressFlagReference(ProgressFlags.DemoCompleted);
     [SerializeField] private bool triggerOnlyOnce = true;
 
     [Header("UI")]
@@ -93,7 +93,7 @@ public class ChapterCompleteTrigger : MonoBehaviour
 
         hasTriggered = true;
 
-        if (!string.IsNullOrWhiteSpace(completionFlagToAdd))
+        if (completionFlagToAdd.IsAssigned)
         {
             GameProgressManager.Instance?.AddProgressFlag(completionFlagToAdd);
         }
@@ -157,7 +157,7 @@ public class ChapterCompleteTrigger : MonoBehaviour
 
     private void TryCompleteFromCurrentProgress()
     {
-        if (string.IsNullOrWhiteSpace(requiredFlag))
+        if (!requiredFlag.IsAssigned)
         {
             return;
         }
@@ -170,7 +170,7 @@ public class ChapterCompleteTrigger : MonoBehaviour
 
     private void HandleProgressFlagAdded(string flag)
     {
-        if (flag == requiredFlag)
+        if (requiredFlag.IsAssigned && flag == requiredFlag.Id)
         {
             CompleteChapter();
         }

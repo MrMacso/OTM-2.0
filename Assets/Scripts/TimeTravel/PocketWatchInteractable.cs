@@ -13,6 +13,9 @@ public class PocketWatchInteractable : MonoBehaviour, IInteractable
     [SerializeField] private WatchPulseSystem watchPulseSystem;
     [SerializeField] private MuseumTimePeriod firstTravelPeriod = MuseumTimePeriod.Past;
 
+    [Header("Progress")]
+    [SerializeField] private ProgressFlagReference pocketWatchCollectedFlag = new ProgressFlagReference(ProgressFlags.PocketWatchCollected);
+
     [Header("Events")]
     [SerializeField] private UnityEvent onFirstWatchBound;
     [SerializeField] private UnityEvent onWatchUsed;
@@ -83,7 +86,12 @@ public class PocketWatchInteractable : MonoBehaviour, IInteractable
         }
 
         hasBoundWatch = true;
-        GameProgressManager.Instance?.AddProgressFlag(ProgressFlags.PocketWatchCollected);
+
+        if (pocketWatchCollectedFlag.IsAssigned)
+        {
+            GameProgressManager.Instance?.AddProgressFlag(pocketWatchCollectedFlag);
+        }
+
         onFirstWatchBound?.Invoke();
     }
 }

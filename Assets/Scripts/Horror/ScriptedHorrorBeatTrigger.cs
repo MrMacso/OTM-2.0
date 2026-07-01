@@ -9,9 +9,9 @@ public class ScriptedHorrorBeatTrigger : MonoBehaviour
     [SerializeField] private bool triggerOnce = true;
     [SerializeField] private bool requireSpecificPeriod = true;
     [SerializeField] private MuseumTimePeriod requiredPeriod = MuseumTimePeriod.Past;
-    [SerializeField] private string requiredFlag;
-    [SerializeField] private string blockedByFlag = ProgressFlags.FirstJumpscareTriggered;
-    [SerializeField] private string completionFlag = ProgressFlags.FirstJumpscareTriggered;
+    [SerializeField] private ProgressFlagReference requiredFlag;
+    [SerializeField] private ProgressFlagReference blockedByFlag = new ProgressFlagReference(ProgressFlags.FirstJumpscareTriggered);
+    [SerializeField] private ProgressFlagReference completionFlag = new ProgressFlagReference(ProgressFlags.FirstJumpscareTriggered);
 
     [Header("Beat Timing")]
     [SerializeField] private float preDelay = 0f;
@@ -131,7 +131,7 @@ public class ScriptedHorrorBeatTrigger : MonoBehaviour
             WatchPulseSystem.Instance?.EndPanic();
         }
 
-        if (!string.IsNullOrWhiteSpace(completionFlag))
+        if (completionFlag.IsAssigned)
         {
             GameProgressManager.Instance?.AddProgressFlag(completionFlag);
         }
@@ -156,13 +156,13 @@ public class ScriptedHorrorBeatTrigger : MonoBehaviour
             }
         }
 
-        if (!string.IsNullOrWhiteSpace(requiredFlag) &&
+        if (requiredFlag.IsAssigned &&
             (GameProgressManager.Instance == null || !GameProgressManager.Instance.HasProgressFlag(requiredFlag)))
         {
             return false;
         }
 
-        if (!string.IsNullOrWhiteSpace(blockedByFlag) &&
+        if (blockedByFlag.IsAssigned &&
             GameProgressManager.Instance != null &&
             GameProgressManager.Instance.HasProgressFlag(blockedByFlag))
         {

@@ -2,6 +2,7 @@ public static class ProgressFlags
 {
     public const string IntroVoiceFinished = "intro_voice_finished";
     public const string PocketWatchCollected = "pocket_watch_collected";
+    public const string PocketWatchAssembled = "pocket_watch_assembled";
     public const string FirstTimeTravelCompleted = "first_time_travel_completed";
 
     public const string CassetteKeyStolenPast = "cassette_key_stolen_past";

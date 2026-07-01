@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c94aa90a2ba95874f8f6e34f7605e600, type: 3}
+  m_Name: Sedative
+  m_EditorClassIdentifier: Assembly-CSharp::InventoryItemDefinition
+  itemId: sedative
+  displayName: Sedative
+  category: 4
+  icon: {fileID: 0}
+  description: A small dose that can help control panic.
+  readableText: 
+  isUnique: 0
+  canBeUsed: 1
+  canBeConsumed: 1
+  progressFlagOnPickup:
+    flag: {fileID: 0}
+    legacyFlagId: 

@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 public class PuzzleCompletionReporter : MonoBehaviour
 {
-    [SerializeField] private string completionProgressFlag = ProgressFlags.BasementPuzzleSolved;
+    [SerializeField] private ProgressFlagReference completionProgressFlag = new ProgressFlagReference(ProgressFlags.BasementPuzzleSolved);
     [SerializeField] private bool reportOnlyOnce = true;
     [SerializeField] private UnityEvent onPuzzleCompleted;
 
@@ -16,7 +16,7 @@ public class PuzzleCompletionReporter : MonoBehaviour
             return;
         }
 
-        if (string.IsNullOrWhiteSpace(completionProgressFlag))
+        if (!completionProgressFlag.IsAssigned)
         {
             Debug.LogWarning($"{nameof(PuzzleCompletionReporter)} on {name} has no completion progress flag assigned.");
             return;

@@ -9,8 +9,8 @@ public class ButterflyEffectObjectActivator : MonoBehaviour
         public string label;
         public bool requireSpecificPeriod;
         public MuseumTimePeriod period = MuseumTimePeriod.Present;
-        public string[] requiredFlags;
-        public string[] blockedByFlags;
+        public ProgressFlagReference[] requiredFlags;
+        public ProgressFlagReference[] blockedByFlags;
         public GameObject[] objectsToEnable;
         public GameObject[] objectsToDisable;
     }
@@ -104,7 +104,7 @@ public class ButterflyEffectObjectActivator : MonoBehaviour
         return true;
     }
 
-    private bool HasAllFlags(string[] flags)
+    private bool HasAllFlags(ProgressFlagReference[] flags)
     {
         if (flags == null || flags.Length == 0)
         {
@@ -116,9 +116,9 @@ public class ButterflyEffectObjectActivator : MonoBehaviour
             return false;
         }
 
-        foreach (string flag in flags)
+        foreach (ProgressFlagReference flag in flags)
         {
-            if (!string.IsNullOrWhiteSpace(flag) && !progressManager.HasProgressFlag(flag))
+            if (flag.IsAssigned && !progressManager.HasProgressFlag(flag))
             {
                 return false;
             }
@@ -127,16 +127,16 @@ public class ButterflyEffectObjectActivator : MonoBehaviour
         return true;
     }
 
-    private bool HasAnyFlag(string[] flags)
+    private bool HasAnyFlag(ProgressFlagReference[] flags)
     {
         if (flags == null || flags.Length == 0 || progressManager == null)
         {
             return false;
         }
 
-        foreach (string flag in flags)
+        foreach (ProgressFlagReference flag in flags)
         {
-            if (!string.IsNullOrWhiteSpace(flag) && progressManager.HasProgressFlag(flag))
+            if (flag.IsAssigned && progressManager.HasProgressFlag(flag))
             {
                 return true;
             }

@@ -14,11 +14,11 @@ public class ObjectiveTrackerUI : MonoBehaviour
         [Header("Availability")]
         public bool requireSpecificPeriod;
         public MuseumTimePeriod requiredPeriod = MuseumTimePeriod.Present;
-        public string[] requiredFlags;
-        public string[] blockedByFlags;
+        public ProgressFlagReference[] requiredFlags;
+        public ProgressFlagReference[] blockedByFlags;
 
         [Header("Completion")]
-        public string completionFlag;
+        public ProgressFlagReference completionFlag;
     }
 
     [Header("UI")]
@@ -190,12 +190,12 @@ public class ObjectiveTrackerUI : MonoBehaviour
 
     private bool IsCompleted(ObjectiveStep step)
     {
-        return !string.IsNullOrWhiteSpace(step.completionFlag) &&
+        return step.completionFlag.IsAssigned &&
                progressManager != null &&
                progressManager.HasProgressFlag(step.completionFlag);
     }
 
-    private bool HasAllFlags(string[] flags)
+    private bool HasAllFlags(ProgressFlagReference[] flags)
     {
         if (flags == null || flags.Length == 0)
         {
@@ -207,9 +207,9 @@ public class ObjectiveTrackerUI : MonoBehaviour
             return false;
         }
 
-        foreach (string flag in flags)
+        foreach (ProgressFlagReference flag in flags)
         {
-            if (!string.IsNullOrWhiteSpace(flag) && !progressManager.HasProgressFlag(flag))
+            if (flag.IsAssigned && !progressManager.HasProgressFlag(flag))
             {
                 return false;
             }
@@ -218,16 +218,16 @@ public class ObjectiveTrackerUI : MonoBehaviour
         return true;
     }
 
-    private bool HasAnyFlag(string[] flags)
+    private bool HasAnyFlag(ProgressFlagReference[] flags)
     {
         if (flags == null || flags.Length == 0 || progressManager == null)
         {
             return false;
         }
 
-        foreach (string flag in flags)
+        foreach (ProgressFlagReference flag in flags)
         {
-            if (!string.IsNullOrWhiteSpace(flag) && progressManager.HasProgressFlag(flag))
+            if (flag.IsAssigned && progressManager.HasProgressFlag(flag))
             {
                 return true;
             }

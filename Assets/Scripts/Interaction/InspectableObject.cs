@@ -6,7 +6,7 @@ public class InspectableObject : MonoBehaviour, IInteractable
     [Header("Inspection")]
     [SerializeField] private GameObject inspectionView;
     [SerializeField] private string prompt = "Press E to inspect";
-    [SerializeField] private string progressFlagOnInspect;
+    [SerializeField] private ProgressFlagReference progressFlagOnInspect;
 
     [Header("Events")]
     [SerializeField] private UnityEvent onInspectionStarted;
@@ -46,8 +46,7 @@ public class InspectableObject : MonoBehaviour, IInteractable
 
         playerControl.SetInspectingMode();
 
-        if (!string.IsNullOrWhiteSpace(progressFlagOnInspect) &&
-            GameProgressManager.Instance != null)
+        if (progressFlagOnInspect.IsAssigned && GameProgressManager.Instance != null)
         {
             GameProgressManager.Instance.AddProgressFlag(progressFlagOnInspect);
         }

@@ -12,9 +12,9 @@ public class GameStageDefinition : ScriptableObject
     [SerializeField] private string displayName;
 
     [Header("Requirements")]
-    [SerializeField] private string[] requiredProgressFlags = Array.Empty<string>();
+    [SerializeField] private ProgressFlagReference[] requiredProgressFlags = Array.Empty<ProgressFlagReference>();
 
     public string StageId => stageId;
     public string DisplayName => string.IsNullOrWhiteSpace(displayName) ? name : displayName;
-    public IReadOnlyList<string> RequiredProgressFlags => requiredProgressFlags ?? Array.Empty<string>();
+    public IReadOnlyList<ProgressFlagReference> RequiredProgressFlags => requiredProgressFlags ?? Array.Empty<ProgressFlagReference>();
 }

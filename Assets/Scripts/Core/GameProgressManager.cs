@@ -10,12 +10,13 @@ public class GameProgressManager : MonoBehaviour
     [SerializeField] private GameStageDefinition initialStage;
     [SerializeField] private List<GameStageDefinition> allStages = new();
 
-    private readonly HashSet<string> completedProgressFlags = new();
+    private readonly HashSet<string> completedProgressFlagIds = new();
 
     public GameStageDefinition CurrentStage { get; private set; }
 
     public event Action<GameStageDefinition> StageChanged;
     public event Action<string> ProgressFlagAdded;
+    public event Action<ProgressFlagDefinition> ProgressFlagDefinitionAdded;
 
     private void Awake()
     {
@@ -47,33 +48,75 @@ public class GameProgressManager : MonoBehaviour
         }
     }
 
-    public bool HasProgressFlag(string progressFlag)
+    public bool HasProgressFlag(ProgressFlagDefinition progressFlag)
     {
-        if (string.IsNullOrWhiteSpace(progressFlag))
+        return progressFlag != null && HasProgressFlag(progressFlag.FlagId);
+    }
+
+    public bool HasProgressFlag(ProgressFlagReference progressFlag)
+    {
+        return progressFlag.IsAssigned && HasProgressFlag(progressFlag.Id);
+    }
+
+    public bool HasProgressFlag(string progressFlagId)
+    {
+        if (string.IsNullOrWhiteSpace(progressFlagId))
         {
             return false;
         }
 
-        return completedProgressFlags.Contains(progressFlag);
+        return completedProgressFlagIds.Contains(progressFlagId);
     }
 
-    public void AddProgressFlag(string progressFlag)
+    public void AddProgressFlag(ProgressFlagDefinition progressFlag)
     {
-        if (string.IsNullOrWhiteSpace(progressFlag))
+        if (progressFlag == null)
+        {
+            Debug.LogWarning("Tried to add a null progress flag asset.");
+            return;
+        }
+
+        AddProgressFlag(progressFlag.FlagId, progressFlag);
+    }
+
+    public void AddProgressFlag(ProgressFlagReference progressFlag)
+    {
+        if (!progressFlag.IsAssigned)
+        {
+            Debug.LogWarning("Tried to add an empty progress flag reference.");
+            return;
+        }
+
+        AddProgressFlag(progressFlag.Id, progressFlag.Definition);
+    }
+
+    public void AddProgressFlag(string progressFlagId)
+    {
+        AddProgressFlag(progressFlagId, null);
+    }
+
+    private void AddProgressFlag(string progressFlagId, ProgressFlagDefinition definition)
+    {
+        if (string.IsNullOrWhiteSpace(progressFlagId))
         {
             Debug.LogWarning("Tried to add an empty progress flag.");
             return;
         }
 
-        bool wasAdded = completedProgressFlags.Add(progressFlag);
+        bool wasAdded = completedProgressFlagIds.Add(progressFlagId);
 
         if (!wasAdded)
         {
             return;
         }
 
-        Debug.Log($"Progress flag added: {progressFlag}");
-        ProgressFlagAdded?.Invoke(progressFlag);
+        Debug.Log($"Progress flag added: {progressFlagId}");
+        ProgressFlagAdded?.Invoke(progressFlagId);
+
+        if (definition != null)
+        {
+            ProgressFlagDefinitionAdded?.Invoke(definition);
+        }
 
         TryAutoAdvanceStage();
     }
@@ -110,9 +153,9 @@ public class GameProgressManager : MonoBehaviour
             return false;
         }
 
-        foreach (string requiredFlag in stage.RequiredProgressFlags)
+        foreach (ProgressFlagReference requiredFlag in stage.RequiredProgressFlags)
         {
-            if (!HasProgressFlag(requiredFlag))
+            if (requiredFlag.IsAssigned && !HasProgressFlag(requiredFlag))
             {
                 return false;
             }
@@ -147,8 +190,13 @@ public class GameProgressManager : MonoBehaviour
         }
     }
 
+    public IReadOnlyCollection<string> GetCompletedProgressFlagIds()
+    {
+        return completedProgressFlagIds;
+    }
+
     public IReadOnlyCollection<string> GetCompletedProgressFlags()
     {
-        return completedProgressFlags;
+        return completedProgressFlagIds;
     }
 }

@@ -16,7 +16,7 @@ public class TimelineProgressFlagInteractable : MonoBehaviour, IInteractable
     [SerializeField] private bool requireExactPeriod = true;
 
     [Header("Progress")]
-    [SerializeField] private string progressFlagToAdd = ProgressFlags.CassetteKeyStolenPast;
+    [SerializeField] private ProgressFlagReference progressFlagToAdd = new ProgressFlagReference(ProgressFlags.CassetteKeyStolenPast);
     [SerializeField] private bool disableAfterInteraction = true;
 
     [Header("Events")]
@@ -41,7 +41,7 @@ public class TimelineProgressFlagInteractable : MonoBehaviour, IInteractable
             return;
         }
 
-        if (string.IsNullOrWhiteSpace(progressFlagToAdd))
+        if (!progressFlagToAdd.IsAssigned)
         {
             Debug.LogWarning($"{nameof(TimelineProgressFlagInteractable)} on {name} has no progress flag assigned.");
             return;
